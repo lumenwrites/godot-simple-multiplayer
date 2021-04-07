@@ -5,10 +5,8 @@ var net
 
 func _ready():
 	# Start the game automatically, without going through the lobby
-	connect_to_server()
-	# Connect signals
-	net.connect("connection_failed", self, "_connection_failed")
-	get_tree().connect("connected_to_server", self, "_connected_to_server")
+	# connect_to_server()
+	return
 	#net.connect("network_peer_connected", self, "_network_peer_connected")
 	#net.connect("network_peer_disconnected", self, "_network_peer_disconnected")
 	#net.connect("server_disconnected", self, "_server_disconnected")
@@ -25,9 +23,15 @@ func connect_to_server():
 	# Connect to server, use WSS
 	# var url = "wss://178.62.117.12:6969"
 	var error = net.connect_to_url(url, PoolStringArray(), true)
+	
+	# Connect signals
+	net.connect("connection_failed", self, "_connection_failed")
+	get_tree().connect("connected_to_server", self, "_connected_to_server")
+
 	get_tree().set_network_peer(net)
 
 func _process(delta):
+	if not net: return
 	if (net.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED || net.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTING):
 		net.poll()
 
