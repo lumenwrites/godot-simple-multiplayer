@@ -1,7 +1,10 @@
 extends Node
 
 var net
-const SERVER_IP = "178.62.117.12" # "127.0.0.1" #  # 
+const DEV = false
+const protocol = "ws://" # "wss://"
+const SERVER_IP = "178.62.117.12"
+const DEV_IP = "127.0.0.1"
 const PORT = 6969
 
 
@@ -20,8 +23,13 @@ func connect_to_server():
 #	net = NetworkedMultiplayerENet.new()
 #	net.create_client(SERVER_IP,PORT)
 	net = WebSocketClient.new()
-	var url = "ws://" + SERVER_IP + ":" + str(PORT)
-	var error = net.connect_to_url(url, PoolStringArray(), true);
+	# Develop locally
+	# var url = "ws://127.0.0.1:6969"
+	# Connect to server, don't use WSS
+	var url = "ws://178.62.117.12:6969"
+	# Connect to server, use WSS
+	# var url = "wss://178.62.117.12:6969"
+	var error = net.connect_to_url(url, PoolStringArray(), true)
 	get_tree().set_network_peer(net)
 
 func _process(delta):
@@ -29,7 +37,9 @@ func _process(delta):
 		net.poll()
 
 func disconnect_from_server(): 
-	net.close_connection()
+	# net.close_connection()
+	#net.close()
+	net.disconnect_from_host()
 
 func _connection_failed():
 	# TODO - this never runs for some reason??

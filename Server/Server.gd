@@ -1,6 +1,6 @@
 extends Node
 
-
+var USE_SSL = false
 var net = WebSocketServer.new() # NetworkedMultiplayerENet.new()
 const PORT = 6969
 const MAX_PLAYERS = 20
@@ -10,8 +10,9 @@ func _ready():
 	
 func start_server():
 	# net.create_server(PORT, MAX_PLAYERS)
-	net.private_key = load("res://HTTPSKeys/private.key")
-	net.ssl_certificate = load("res://HTTPSKeys/certificate.crt")
+	if USE_SSL:
+		net.private_key = load("res://HTTPSKeys/private.key")
+		net.ssl_certificate = load("res://HTTPSKeys/certificate.crt")
 	
 	net.listen(PORT, PoolStringArray(), true)
 

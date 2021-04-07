@@ -5,7 +5,8 @@ const INTERPOLATION_OFFSET = 100
 
 func _ready():
 	$HealthBarPosition.set_as_toplevel(true)
-	$HealthBarPosition/PlayerName.text = Server.player_list[int(name)]["player_name"]
+	if Server.player_list.has(int(name)): # sometimes it crashes here, not sure why
+		$HealthBarPosition/PlayerName.text = Server.player_list[int(name)]["player_name"]
 
 func _physics_process(delta):
 	$HealthBarPosition.global_position = global_position
