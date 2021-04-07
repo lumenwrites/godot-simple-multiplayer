@@ -1,7 +1,7 @@
 extends Node
 
 
-var net = NetworkedMultiplayerENet.new()
+var net = WebSocketServer.new() # NetworkedMultiplayerENet.new()
 const PORT = 6969
 const MAX_PLAYERS = 20
 
@@ -9,13 +9,18 @@ func _ready():
 	start_server()
 	
 func start_server():
-	net.create_server(PORT, MAX_PLAYERS)
+	# net.create_server(PORT, MAX_PLAYERS)
+	net.listen(PORT, PoolStringArray(), true)
 	get_tree().set_network_peer(net)
 	print("Server Started")
 	# When clients connect/disconnect these signals fire
 	net.connect("peer_connected", self, "_peer_connected")
 	net.connect("peer_disconnected", self, "_peer_disconnected")
-	
+
+func _process(delta):
+	if net.is_listening(): 
+		net.poll()
+
 func _peer_connected(player_id):
 	print("User " + str(player_id) + " connected")
 

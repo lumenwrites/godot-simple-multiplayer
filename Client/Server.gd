@@ -17,9 +17,16 @@ func _ready():
 
 func connect_to_server():
 	print("Connecting to server...")
-	net = NetworkedMultiplayerENet.new()
-	net.create_client(SERVER_IP,PORT)
+#	net = NetworkedMultiplayerENet.new()
+#	net.create_client(SERVER_IP,PORT)
+	net = WebSocketClient.new()
+	var url = "ws://" + SERVER_IP + ":" + str(PORT)
+	var error = net.connect_to_url(url, PoolStringArray(), true);
 	get_tree().set_network_peer(net)
+
+func _process(delta):
+	if (net.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED || net.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTING):
+		net.poll()
 
 func disconnect_from_server(): 
 	net.close_connection()
