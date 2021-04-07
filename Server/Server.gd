@@ -1,7 +1,7 @@
 extends Node
 
-var USE_SSL = false
-var net = WebSocketServer.new() # NetworkedMultiplayerENet.new()
+var USE_SSL = true
+var server = WebSocketServer.new() # NetworkedMultiplayerENet.new()
 const PORT = 6969
 const MAX_PLAYERS = 20
 
@@ -11,20 +11,25 @@ func _ready():
 func start_server():
 	# net.create_server(PORT, MAX_PLAYERS)
 	if USE_SSL:
-		net.private_key = load("res://HTTPSKeys/private.key")
-		net.ssl_certificate = load("res://HTTPSKeys/certificate.crt")
-	
-	net.listen(PORT, PoolStringArray(), true)
+		server.private_key = CryptoKey.new() # ??
+		server.private_key = load("res://HTTPSKeys/privkey.key")
+		server.ssl_certificate = X509Certificate.new() # ??
+		server.ssl_certificate = load("res://HTTPSKeys/certificate.crt")
+		server.ca_chain = X509Certificate.new() # ??
+		server.ca_chain.load("res://HTTPSKeys/chain.crt") # do I need this?
+		server.set_verify_ssl_enabled(true) # do I need this?
 
-	get_tree().set_network_peer(net)
+	server.listen(PORT, PoolStringArray(), true)
+
+	get_tree().set_network_peer(server)
 	print("Server Started")
 	# When clients connect/disconnect these signals fire
-	net.connect("peer_connected", self, "_peer_connected")
-	net.connect("peer_disconnected", self, "_peer_disconnected")
+	server.connect("peer_connected", self, "_peer_connected")
+	server.connect("peer_disconnected", self, "_peer_disconnected")
 
 func _process(delta):
-	if net.is_listening(): 
-		net.poll()
+	if server.is_listening(): 
+		server.poll()
 
 func _peer_connected(player_id):
 	print("User " + str(player_id) + " connected")

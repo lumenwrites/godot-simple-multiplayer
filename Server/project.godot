@@ -19,6 +19,10 @@ config/name="Server"
 run/main_scene="res://Server.tscn"
 config/icon="res://icon.png"
 
+[network]
+
+ssl/certificates="res://HTTPSKeys/certificate.crt"
+
 [physics]
 
 common/physics_fps=20
