@@ -10,7 +10,11 @@ func _ready():
 	
 func start_server():
 	# net.create_server(PORT, MAX_PLAYERS)
+	net.private_key = load("res://HTTPSKeys/private.key")
+	net.ssl_certificate = load("res://HTTPSKeys/certificate.crt")
+	
 	net.listen(PORT, PoolStringArray(), true)
+
 	get_tree().set_network_peer(net)
 	print("Server Started")
 	# When clients connect/disconnect these signals fire
