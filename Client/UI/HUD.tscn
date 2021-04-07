@@ -20,18 +20,20 @@ font_data = ExtResource( 2 )
 script = ExtResource( 3 )
 
 [node name="HealthBar" parent="." instance=ExtResource( 1 )]
-margin_left = 24.0
-margin_top = 272.0
-margin_right = 120.0
-margin_bottom = 288.0
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = -36.0
+margin_right = 116.0
+margin_bottom = -20.0
 custom_styles/fg = SubResource( 1 )
 custom_styles/bg = SubResource( 2 )
 
 [node name="PlayerList" type="ItemList" parent="."]
-margin_left = 328.0
-margin_top = 8.0
-margin_right = 528.0
-margin_bottom = 125.0
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -200.0
+margin_bottom = 117.0
 custom_styles/bg = SubResource( 3 )
 custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )

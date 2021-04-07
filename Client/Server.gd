@@ -1,7 +1,7 @@
 extends Node
 
 var net
-const SERVER_IP = "127.0.0.1" # "178.62.117.12" # 
+const SERVER_IP = "178.62.117.12" # "127.0.0.1" #  # 
 const PORT = 6969
 
 
