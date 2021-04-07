@@ -1,7 +1,7 @@
 extends Node
 
 var net
-const SERVER_IP = "178.62.117.12" # "127.0.0.1"
+const SERVER_IP = "127.0.0.1" # "178.62.117.12" # 
 const PORT = 6969
 
 
@@ -16,6 +16,7 @@ func _ready():
 	#net.connect("server_disconnected", self, "_server_disconnected")
 
 func connect_to_server():
+	print("Connecting to server...")
 	net = NetworkedMultiplayerENet.new()
 	net.create_client(SERVER_IP,PORT)
 	get_tree().set_network_peer(net)
