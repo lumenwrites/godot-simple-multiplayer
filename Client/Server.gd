@@ -1,11 +1,6 @@
 extends Node
 
 var net
-const DEV = false
-const protocol = "ws://" # "wss://"
-const SERVER_IP = "178.62.117.12"
-const DEV_IP = "127.0.0.1"
-const PORT = 6969
 
 
 func _ready():
@@ -52,7 +47,7 @@ func _connected_to_server():
 	print("Successfully connected to server")
 	var player_data = Data.player_data
 	# temporarily use ids instead of names
-	player_data = { "player_name": str(get_tree().get_network_unique_id()) }
+	# player_data = { "player_name": str(get_tree().get_network_unique_id()) }
 	get_tree().change_scene("res://Environment/World.tscn")
 	rpc_id(1, "broadcast_player_list", player_data)
 
