@@ -19,9 +19,11 @@ func connect_to_server():
 	# Develop locally
 	# var url = "ws://127.0.0.1:6969"
 	# Connect to server, don't use WSS
-	var url = "ws://178.62.117.12:6969"
+	# var url = "ws://178.62.117.12:6969"
 	# Connect to server, use WSS
-	# var url = "wss://178.62.117.12:6969"
+	#var url = "wss://178.62.117.12:6969"
+	var url = "wss://godotlab.io:6969"
+	net.trusted_ssl_certificate = load("res://HTTPSKeys/certificate.crt") # do I need that?
 	var error = net.connect_to_url(url, PoolStringArray(), true)
 	
 	# Connect signals

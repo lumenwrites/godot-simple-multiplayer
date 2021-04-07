@@ -1,6 +1,6 @@
 extends Node
 
-var USE_SSL = true
+var USE_SSL = false # true
 var server = WebSocketServer.new() # NetworkedMultiplayerENet.new()
 const PORT = 6969
 const MAX_PLAYERS = 20
