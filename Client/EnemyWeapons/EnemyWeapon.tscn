@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Weapons/Bullet.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/sounds/weapons/gunshot.wav" type="AudioStream" id=2]
+[ext_resource path="res://assets/art/weapons/AK.png" type="Texture" id=3]
+[ext_resource path="res://EnemyWeapons/EnemyWeapon.gd" type="Script" id=4]
+[ext_resource path="res://assets/art/player/arm.png" type="Texture" id=5]
+[ext_resource path="res://assets/art/fx/muzzle-flash.png" type="Texture" id=6]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "Flash",
+"speed": 5.0
+} ]
+
+[sub_resource type="Animation" id=2]
+resource_name = "fire"
+length = 0.1
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprites:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.04, 0.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( -10, 0 ), Vector2( 0, 0 ) ]
+}
+
+[node name="EnemyWeapon" type="Node2D"]
+z_index = 1
+script = ExtResource( 4 )
+bullet = ExtResource( 1 )
+sound = ExtResource( 2 )
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="arm1" type="Sprite" parent="Sprites"]
+position = Vector2( 29, -8 )
+rotation = 1.91879
+scale = Vector2( 0.235663, 0.235663 )
+texture = ExtResource( 5 )
+
+[node name="arm2" type="Sprite" parent="Sprites"]
+position = Vector2( 14, 15 )
+rotation = 1.54656
+scale = Vector2( 0.235663, 0.235663 )
+texture = ExtResource( 5 )
+
+[node name="MuzzleFlash" type="AnimatedSprite" parent="Sprites"]
+visible = false
+position = Vector2( 123, 1 )
+scale = Vector2( 0.261311, 0.261311 )
+frames = SubResource( 1 )
+animation = "Flash"
+
+[node name="WeaponSprite" type="Sprite" parent="Sprites"]
+position = Vector2( 63, 5 )
+rotation = -0.0698132
+scale = Vector2( 0.265467, 0.265467 )
+texture = ExtResource( 3 )
+
+[node name="Muzzle" type="Position2D" parent="."]
+position = Vector2( 112, 0 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/fire = SubResource( 2 )
+[connection signal="animation_finished" from="Sprites/MuzzleFlash" to="." method="_on_MuzzleFlash_animation_finished"]

@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://UI/Lobby.gd" type="Script" id=1]
+[ext_resource path="res://UI/theme.tres" type="Theme" id=2]
+[ext_resource path="res://assets/fonts/LilitaOne-Regular.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 3 )
+
+[node name="Lobby" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+margin_left = 412.0
+margin_top = 256.0
+margin_right = 612.0
+margin_bottom = 344.0
+
+[node name="PlayerName" type="LineEdit" parent="CenterContainer/VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 200, 0 )
+theme = ExtResource( 2 )
+custom_fonts/font = SubResource( 1 )
+
+[node name="StartGame" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 37.0
+margin_right = 200.0
+margin_bottom = 70.0
+theme = ExtResource( 2 )
+custom_fonts/font = SubResource( 2 )
+text = "Start Game"
+
+[node name="Error" type="Label" parent="CenterContainer/VBoxContainer"]
+margin_top = 74.0
+margin_right = 200.0
+margin_bottom = 88.0
+[connection signal="text_changed" from="CenterContainer/VBoxContainer/PlayerName" to="." method="_on_PlayerName_text_changed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/StartGame" to="." method="_on_StartGame_pressed"]
