@@ -19,6 +19,7 @@ func _ready():
 
 func _physics_process(delta):
 	position += vel * delta
+	$BulletTrail.scale.x = lerp($BulletTrail.scale.x, 0.7, 0.1)
 
 func _on_Bullet_body_entered(body):
 	if body == parent: return

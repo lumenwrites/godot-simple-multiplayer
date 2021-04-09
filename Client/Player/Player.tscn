@@ -14,6 +14,7 @@ script = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="Body" type="Sprite" parent="."]
+modulate = Color( 0.988235, 0.784314, 0.458824, 1 )
 z_index = 2
 texture = ExtResource( 4 )
 
@@ -21,3 +22,8 @@ texture = ExtResource( 4 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
+
+[node name="tick_rate" type="Timer" parent="."]
+wait_time = 0.03
+autostart = true
+[connection signal="timeout" from="tick_rate" to="." method="_on_tick_rate_timeout"]

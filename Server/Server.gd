@@ -1,6 +1,6 @@
 extends Node
 
-var USE_SSL = true
+var USE_SSL = false
 var server = WebSocketServer.new() # NetworkedMultiplayerENet.new()
 const PORT = 6969
 const MAX_PLAYERS = 20
@@ -42,7 +42,9 @@ remote func broadcast_player_list(player_data):
 	# Once player is _connected_to_server, they'll send me their info(name)
 	# so that I can send it to everyone and update their player lists
 	var player_id = get_tree().get_rpc_sender_id() 
+	player_data["join_order"] = player_list.size()
 	player_list[player_id] = player_data
+
 	rpc_id(0, "update_player_list", player_list)
 
 # separate variable containing only their names, so that I don't have to
@@ -61,8 +63,9 @@ remote func receive_player_state(player_state):
 	# Create or update player state with the latest one
 	player_states[player_id] = player_state
 
-# physics fps is set to 20 in project settings so that it doesn't update too often
-func _physics_process(delta):
+
+func _on_tick_rate_timeout():
+	# Broadcast world state every time the timer times out (every 0.05s. That's 20fps).
 	world_state["player_states"] = player_states.duplicate(true) # Deep copy
 	# Erase timestamps, helps to make packets as small as possible
 	for player_id in world_state["player_states"].keys(): 
@@ -75,6 +78,7 @@ remote func broadcast_attack(player_state):
 	var player_id = get_tree().get_rpc_sender_id() 
 	player_state["ID"] = player_id
 	rpc_id(0, "receive_attack", player_state)
+
 
 
 

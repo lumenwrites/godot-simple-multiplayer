@@ -17,7 +17,7 @@ func fire():
 		$AnimationPlayer.play("fire")
 		spawn_bullet()
 		$AudioStreamPlayer.stream = sound
-		# $AudioStreamPlayer.play()
+		$AudioStreamPlayer.play()
 
 		send_attack()
 		

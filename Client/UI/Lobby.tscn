@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://UI/Lobby.gd" type="Script" id=1]
 [ext_resource path="res://UI/theme.tres" type="Theme" id=2]
@@ -7,7 +7,13 @@
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 3 )
 
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 1, 1, 1, 1 )
+
 [sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 3 )
 
 [node name="Lobby" type="Control"]
@@ -27,9 +33,9 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 margin_left = 412.0
-margin_top = 256.0
+margin_top = 244.0
 margin_right = 612.0
-margin_bottom = 344.0
+margin_bottom = 355.0
 
 [node name="PlayerName" type="LineEdit" parent="CenterContainer/VBoxContainer"]
 margin_right = 200.0
@@ -38,17 +44,30 @@ rect_min_size = Vector2( 200, 0 )
 theme = ExtResource( 2 )
 custom_fonts/font = SubResource( 1 )
 
-[node name="StartGame" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="ColorPicker" type="ColorPickerButton" parent="CenterContainer/VBoxContainer"]
 margin_top = 37.0
 margin_right = 200.0
-margin_bottom = 70.0
+margin_bottom = 51.0
+theme = ExtResource( 2 )
+custom_styles/normal = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartGame" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 55.0
+margin_right = 200.0
+margin_bottom = 88.0
 theme = ExtResource( 2 )
 custom_fonts/font = SubResource( 2 )
 text = "Start Game"
 
 [node name="Error" type="Label" parent="CenterContainer/VBoxContainer"]
-margin_top = 74.0
+margin_top = 92.0
 margin_right = 200.0
-margin_bottom = 88.0
+margin_bottom = 111.0
+custom_fonts/font = SubResource( 3 )
+align = 1
 [connection signal="text_changed" from="CenterContainer/VBoxContainer/PlayerName" to="." method="_on_PlayerName_text_changed"]
+[connection signal="color_changed" from="CenterContainer/VBoxContainer/ColorPicker" to="." method="_on_ColorPicker_color_changed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/StartGame" to="." method="_on_StartGame_pressed"]

@@ -9,23 +9,31 @@ var friction = 0.85
 var vel = Vector2()
 
 func _ready():
-	# Spawn at a random position. [TODO] Make sure to handle busy spawns.
-	randomize()
-	var spawns = get_node("/root/World/SpawnPositions").get_children()
-	var rand_spawn = spawns[floor(rand_range(0,spawns.size()))]
-	global_position = rand_spawn.global_position
 	Input.set_custom_mouse_cursor(
 		load("res://assets/art/icons/crossair_black.png"),
 		Input.CURSOR_ARROW, Vector2(16,16)
 	)
-
+	
 func _input(event):
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
+	if Input.is_action_just_pressed("Q"):
+		auto_move = !auto_move
 
+var auto_move = false
+var dir = Vector2.RIGHT
 func _physics_process(delta):
+	if auto_move:
+		vel += dir*speed
+		vel *= friction
+		vel = move_and_slide(vel)
+		if global_position.x > 400:
+			dir = Vector2.LEFT
+		if global_position.x < 0:
+			dir = Vector2.RIGHT
+		return
+
 	move(delta)
-	send_player_state()
 
 	if Input.is_action_pressed("fire"):
 		$Weapon.fire()
@@ -44,11 +52,16 @@ func move(delta):
 	# [TODO] Lag/jitter still happens anyway somehow??
 	look_at(get_global_mouse_position())
 
+func _on_tick_rate_timeout():
+	# Send player states every 0.03s, instead of 60 times per second (0.016).
+	send_player_state()
+
 func send_player_state():
 	var player_state = {
 		"T": OS.get_system_time_msecs(),
 		"P": get_global_position(),
-		"R": rotation
+		"R": rotation,
+		"V": vel
 	}
 	Server.send_player_state(player_state)
 
@@ -63,3 +76,5 @@ func take_damage(damage):
 			Server.disconnect_from_server() # leave the game
 			get_tree().change_scene("res://UI/Lobby.tscn") # kicked out to the lobby
 			print("You lost!")
+
+

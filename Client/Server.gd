@@ -2,10 +2,15 @@ extends Node
 
 var net
 
+const DEV = false
+# save it in a global variable so that Enemy could take a name from this list
+# to display it above their healthbar
+var player_list = [] 
 
 func _ready():
-	# Start the game automatically, without going through the lobby
-	# connect_to_server()
+	if DEV:
+		# Start the game automatically, without going through the lobby
+		connect_to_server()
 	return
 	#net.connect("network_peer_connected", self, "_network_peer_connected")
 	#net.connect("network_peer_disconnected", self, "_network_peer_disconnected")
@@ -16,13 +21,11 @@ func connect_to_server():
 #	net = NetworkedMultiplayerENet.new()
 #	net.create_client(SERVER_IP,PORT)
 	net = WebSocketClient.new()
-	# Develop locally
-	# var url = "ws://127.0.0.1:6969"
-	# Connect to server, don't use WSS
-	# var url = "ws://178.62.117.12:6969"
+	
 	# Connect to server, use WSS
-	#var url = "wss://178.62.117.12:6969"
 	var url = "wss://godotlab.io:6969"
+	# Develop locally
+	if DEV: url = "ws://127.0.0.1:6969"
 	net.trusted_ssl_certificate = load("res://HTTPSKeys/certificate.crt") # do I need that?
 	var error = net.connect_to_url(url, PoolStringArray(), true)
 	
@@ -45,7 +48,7 @@ func disconnect_from_server():
 func _connection_failed():
 	# TODO - this never runs for some reason??
 	print("Can't connect to server!")
-	get_tree().change_scene("res://UI/Lobby.tscn")
+	# get_tree().change_scene("res://UI/Lobby.tscn")
 	var lobby = get_node_or_null("/root/Lobby")
 	lobby.display_error("Can't connect to server!")
 
@@ -57,15 +60,13 @@ func _connected_to_server():
 	get_tree().change_scene("res://Environment/World.tscn")
 	rpc_id(1, "broadcast_player_list", player_data)
 
-# save it in a global variable so that Enemy could take a name from this list
-# to display it above their healthbar
-var player_list = [] 
+
 remote func update_player_list(players):
 	# When a new player joins, server updates the players variable, and then
 	# tells everyone to run this function
 	player_list = players
-	var HUD = get_node_or_null("/root/World/HUD")
-	if HUD: HUD.update_players(player_list)
+	get_node("/root/World").receive_player_info(player_list)
+
 
 remote func despawn_enemy(enemy_id):
 	# Cant set it on_ready, becasue it disappears when I reload scene

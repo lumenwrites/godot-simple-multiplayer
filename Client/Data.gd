@@ -16,7 +16,10 @@ func get_data():
 	var file = File.new()
 	
 	if not file.file_exists(SAVEGAME):
-		player_data = {"player_name": "Anonymous"}
+		player_data = {
+			"player_name": "Anonymous",
+			"color": "FCC875"
+		}
 		save_data()
 
 	file.open(SAVEGAME, File.READ)

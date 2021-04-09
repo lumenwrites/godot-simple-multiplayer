@@ -4,3 +4,8 @@
 
 [node name="Server" type="Node"]
 script = ExtResource( 1 )
+
+[node name="tick_rate" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
+[connection signal="timeout" from="tick_rate" to="." method="_on_tick_rate_timeout"]

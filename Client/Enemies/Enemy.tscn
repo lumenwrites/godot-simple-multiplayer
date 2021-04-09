@@ -30,9 +30,14 @@ shape = SubResource( 1 )
 z_index = 2
 texture = ExtResource( 2 )
 
-[node name="Visualizer" type="Sprite" parent="."]
+[node name="VisualizerBlue" type="Sprite" parent="."]
 visible = false
-modulate = Color( 1, 0, 0, 0.5 )
+modulate = Color( 0, 0.172549, 1, 0.666667 )
+z_index = 2
+texture = ExtResource( 2 )
+
+[node name="VisualizerRed" type="Sprite" parent="."]
+modulate = Color( 1, 0, 0, 0.666667 )
 z_index = 2
 texture = ExtResource( 2 )
 
