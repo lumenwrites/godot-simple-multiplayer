@@ -7,13 +7,13 @@
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 3 )
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 3 )
 
 [node name="Lobby" type="Control"]
@@ -49,7 +49,7 @@ margin_top = 37.0
 margin_right = 200.0
 margin_bottom = 51.0
 theme = ExtResource( 2 )
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -59,14 +59,14 @@ margin_top = 55.0
 margin_right = 200.0
 margin_bottom = 88.0
 theme = ExtResource( 2 )
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Start Game"
 
 [node name="Error" type="Label" parent="CenterContainer/VBoxContainer"]
 margin_top = 92.0
 margin_right = 200.0
 margin_bottom = 111.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 4 )
 align = 1
 [connection signal="text_changed" from="CenterContainer/VBoxContainer/PlayerName" to="." method="_on_PlayerName_text_changed"]
 [connection signal="color_changed" from="CenterContainer/VBoxContainer/ColorPicker" to="." method="_on_ColorPicker_color_changed"]

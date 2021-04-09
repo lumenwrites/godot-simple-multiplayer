@@ -38,13 +38,12 @@ func _peer_disconnected(player_id):
 		rpc_id(0, "update_player_list", player_list)
 
 remote func broadcast_player_list(player_data):
-	print("Broadcast player list ", player_list)
 	# Once player is _connected_to_server, they'll send me their info(name)
 	# so that I can send it to everyone and update their player lists
 	var player_id = get_tree().get_rpc_sender_id() 
 	player_data["join_order"] = player_list.size()
 	player_list[player_id] = player_data
-
+	print("Broadcast player list ", player_list)
 	rpc_id(0, "update_player_list", player_list)
 
 # separate variable containing only their names, so that I don't have to

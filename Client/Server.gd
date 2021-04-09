@@ -1,8 +1,8 @@
 extends Node
 
-var net
+var client
 
-var DEV = OS.get_environment("DEV") or Array(OS.get_cmdline_args()).has("-dev")
+var DEV = OS.get_environment("DEV") or Array(OS.get_cmdline_args()).has("-dev") # or true
 # save it in a global variable so that Enemy could take a name from this list
 # to display it above their healthbar
 var player_list = [] 
@@ -10,40 +10,39 @@ var player_list = []
 func _ready():
 	# Start the game automatically, without going through the lobby
 	if DEV: connect_to_server()
-	return
-	#net.connect("network_peer_connected", self, "_network_peer_connected")
-	#net.connect("network_peer_disconnected", self, "_network_peer_disconnected")
-	#net.connect("server_disconnected", self, "_server_disconnected")
+
 
 func connect_to_server():
-#	net = NetworkedMultiplayerENet.new()
-#	net.create_client(SERVER_IP,PORT)
-	net = WebSocketClient.new()
+	client = WebSocketClient.new()
 	
 	# Connect to server, use WSS
 	var url = "wss://godotlab.io:6969"
 	# Develop locally
 	if DEV: url = "ws://127.0.0.1:6969"
+	# Connect without WSS
+	url = "ws://178.62.117.12:6969"
 
 	print("Connecting to server: ", url)
-	net.trusted_ssl_certificate = load("res://HTTPSKeys/certificate.crt") # do I need that?
-	var error = net.connect_to_url(url, PoolStringArray(), true)
+	var error = client.connect_to_url(url, PoolStringArray(), true)
 
 	# Connect signals
-	net.connect("connection_failed", self, "_connection_failed")
+	client.connect("connection_failed", self, "_connection_failed")
 	get_tree().connect("connected_to_server", self, "_connected_to_server")
+	#net.connect("network_peer_connected", self, "_network_peer_connected")
+	#net.connect("network_peer_disconnected", self, "_network_peer_disconnected")
+	#net.connect("server_disconnected", self, "_server_disconnected")
 
-	get_tree().set_network_peer(net)
+	get_tree().set_network_peer(client)
 
 func _process(delta):
-	if not net: return
-	if (net.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED || net.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTING):
-		net.poll()
+	if not client: return
+	if (client.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED || client.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTING):
+		client.poll()
 
 func disconnect_from_server(): 
 	# net.close_connection()
 	#net.close()
-	net.disconnect_from_host()
+	client.disconnect_from_host()
 
 func _connection_failed():
 	# TODO - this never runs for some reason??
