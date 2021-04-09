@@ -11,6 +11,7 @@ func _ready():
 func start_server():
 	# net.create_server(PORT, MAX_PLAYERS)
 	if PROD:
+		print("Using SSL")
 		server.private_key = load("res://HTTPSKeys/privkey.key")
 		server.ssl_certificate = load("res://HTTPSKeys/certificate.crt")
 

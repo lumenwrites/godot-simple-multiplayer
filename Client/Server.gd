@@ -8,16 +8,14 @@ var DEV = OS.get_environment("DEV") or Array(OS.get_cmdline_args()).has("-dev")
 var player_list = [] 
 
 func _ready():
-	if DEV:
-		# Start the game automatically, without going through the lobby
-		connect_to_server()
+	# Start the game automatically, without going through the lobby
+	if DEV: connect_to_server()
 	return
 	#net.connect("network_peer_connected", self, "_network_peer_connected")
 	#net.connect("network_peer_disconnected", self, "_network_peer_disconnected")
 	#net.connect("server_disconnected", self, "_server_disconnected")
 
 func connect_to_server():
-	print("Connecting to server...")
 #	net = NetworkedMultiplayerENet.new()
 #	net.create_client(SERVER_IP,PORT)
 	net = WebSocketClient.new()
@@ -26,6 +24,8 @@ func connect_to_server():
 	var url = "wss://godotlab.io:6969"
 	# Develop locally
 	if DEV: url = "ws://127.0.0.1:6969"
+
+	print("Connecting to server: ", url)
 	net.trusted_ssl_certificate = load("res://HTTPSKeys/certificate.crt") # do I need that?
 	var error = net.connect_to_url(url, PoolStringArray(), true)
 
