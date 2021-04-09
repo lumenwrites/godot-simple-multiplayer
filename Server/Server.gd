@@ -1,6 +1,6 @@
 extends Node
 
-var USE_SSL = false
+var PROD = OS.get_environment("PROD") or Array(OS.get_cmdline_args()).has("-prod")
 var server = WebSocketServer.new() # NetworkedMultiplayerENet.new()
 const PORT = 6969
 const MAX_PLAYERS = 20
@@ -10,10 +10,9 @@ func _ready():
 	
 func start_server():
 	# net.create_server(PORT, MAX_PLAYERS)
-	if USE_SSL:
+	if PROD:
 		server.private_key = load("res://HTTPSKeys/privkey.key")
 		server.ssl_certificate = load("res://HTTPSKeys/certificate.crt")
-
 
 	server.listen(PORT, PoolStringArray(), true)
 

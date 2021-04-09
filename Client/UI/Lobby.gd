@@ -19,7 +19,6 @@ func _on_PlayerName_text_changed(new_text):
 
 
 func _on_ColorPicker_color_changed(color):
-	print(color.to_html())
 	Data.player_data["color"] = color.to_html()
 	Data.save_data()
 

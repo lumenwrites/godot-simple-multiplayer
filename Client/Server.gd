@@ -2,7 +2,7 @@ extends Node
 
 var net
 
-const DEV = false
+var DEV = OS.get_environment("DEV") or Array(OS.get_cmdline_args()).has("-dev")
 # save it in a global variable so that Enemy could take a name from this list
 # to display it above their healthbar
 var player_list = [] 
@@ -28,7 +28,7 @@ func connect_to_server():
 	if DEV: url = "ws://127.0.0.1:6969"
 	net.trusted_ssl_certificate = load("res://HTTPSKeys/certificate.crt") # do I need that?
 	var error = net.connect_to_url(url, PoolStringArray(), true)
-	
+
 	# Connect signals
 	net.connect("connection_failed", self, "_connection_failed")
 	get_tree().connect("connected_to_server", self, "_connected_to_server")
