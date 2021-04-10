@@ -5,7 +5,7 @@ var ENEMY = preload("res://Enemies/Enemy.tscn")
 onready var enemies = $Enemies
 onready var HUD = $HUD
 
-const INTERPOLATION_OFFSET = 200
+const INTERPOLATION_OFFSET = 100
 var last_world_state_t = 0
 var states = []
 
@@ -59,12 +59,13 @@ func receive_world_state(world_state):
 func _physics_process(delta):
 	# We render the world 100ms in the past
 	var render_time = OS.get_system_time_msecs() - INTERPOLATION_OFFSET
+	# var render_time = Server.client_clock - INTERPOLATION_OFFSET
 	if states.size() < 2: return # if there's not enough states
 	# Once a state slides past the render time, it becomes the prev_state (state[0])
 	# And the next upcoming state becomes next_state (state[1])
 	while states.size() > 2 and render_time > states[1]["T"]: 
 		states.remove(0)
-	# print(states.size())
+	#print(states.size())
 
 func receive_attack(player_state):
 	var my_id = get_tree().get_network_unique_id()

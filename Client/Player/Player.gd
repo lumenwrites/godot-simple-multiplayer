@@ -58,7 +58,7 @@ func _on_tick_rate_timeout():
 
 func send_player_state():
 	var player_state = {
-		"T": OS.get_system_time_msecs(),
+		"T": Server.client_clock, # OS.get_system_time_msecs(),
 		"P": get_global_position(),
 		"R": rotation,
 		"V": vel

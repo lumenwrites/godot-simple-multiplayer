@@ -25,6 +25,7 @@ func _physics_process(delta):
 	if not world.states[-1]["player_states"].has(int(name)): return
 	$VisualizerRed.global_position = world.states[-1]["player_states"][int(name)]["P"]
 
+
 func move_simple(delta):
 	if not world.states[-1]["player_states"].has(int(name)): return
 	# most recent known state
@@ -34,8 +35,9 @@ func move_simple(delta):
 	rotation = lerp_angle(rotation, state["R"], 0.1)
 
 func move():
-	# We render the world 100ms in the past
-	var render_time = OS.get_system_time_msecs() - INTERPOLATION_OFFSET
+	var render_time = OS.get_system_time_msecs() - INTERPOLATION_OFFSET 
+	var render_time_clock = Server.client_clock - INTERPOLATION_OFFSET
+	# print(print_time(render_time), " ", print_time(render_time_clock))
 	if world.states.size() < 2: return # if there's not enough states
 
 	# If the enemy isn't in the previous world state - they've just joined, 
@@ -55,7 +57,7 @@ func move():
 		# Remember rubberbanding time. I will lerp to it until it slides into the past
 		rubberband_state_time = next_time
 		# Remember my position/rotation and time at the moment a rubberbanding state arrives
-		rubberband_arrival_time = OS.get_system_time_msecs() - INTERPOLATION_OFFSET
+		rubberband_arrival_time = Server.client_clock - INTERPOLATION_OFFSET # OS.get_system_time_msecs() - INTERPOLATION_OFFSET
 		rubberband_start_position = global_position
 		rubberband_start_rotation = rotation
 
@@ -69,6 +71,7 @@ func move():
 		return
 	
 	var progress = float(render_time - prev_time) / float(next_time - prev_time)
+
 	if progress > 1: 
 		print("Most recent known state slid into the past, before render time")
 		progress = 1

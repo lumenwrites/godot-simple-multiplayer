@@ -52,7 +52,7 @@ func disconnect_from_server():
 func _connection_failed():
 	# TODO - this never runs for some reason??
 	print("Can't connect to server!")
-	# get_tree().change_scene("res://UI/Lobby.tscn")
+	get_tree().change_scene("res://UI/Lobby.tscn")
 	var lobby = get_node_or_null("/root/Lobby")
 	lobby.display_error("Can't connect to server!")
 
@@ -71,7 +71,6 @@ remote func update_player_list(players):
 	player_list = players
 	get_node("/root/World").receive_player_info(player_list)
 
-
 remote func despawn_enemy(enemy_id):
 	# Cant set it on_ready, becasue it disappears when I reload scene
 	get_node("/root/World").despawn_enemy(enemy_id)
@@ -83,6 +82,8 @@ remote func receive_world_state(world_state):
 	var world = get_node_or_null("/root/World")
 	if not world: return
 	world.receive_world_state(world_state)
+	# print("Server Time: ", print_time(world_state["T"]), "\tClient Time: ", print_time(client_clock))
+	print("Difference: ", world_state["T"] - client_clock)
 
 func send_attack(player_state):
 	rpc_id(1, "broadcast_attack", player_state)
@@ -119,10 +120,10 @@ remote func return_server_time(server_time, initial_client_request_time):
 func _physics_process(delta):
 	# Make the client clock tick to make sure it stays synchronised
 	# client_clock is an integer, in milliseconds. Must be integer because it's too big for a float to remain precise
+# The latency is constantly shifting. It changes every ms, but you can't check for it every ms, it'd take too much bandwidth and effort	
+	# we have caculated average change in latency in return_latency, and now we're taking it into account here
 	client_clock += int(delta*1000) + delta_latency
-	# The latency is constantly shifting. It changes every ms, but you can't check for it every ms, it'd take too much bandwidth and effort
-
-	delta_latency -= delta_latency
+	delta_latency = 0 # reset delta latency once we've taken it into account
 	# Collect the remaining decimals that are left after we've turned the float into an integer
 	# Turn it from seconds into milliseconds, subtract the ms's we've already added to the client_clock above
 	# Once it's higher than 1 - increment the client_clock by 1ms.
@@ -130,6 +131,7 @@ func _physics_process(delta):
 	if decimal_collector >= 1.00:
 		client_clock += 1
 		decimal_collector -= 1.00
+
 	
 func determine_latency():
 	# Runs every 0.5 seconds, checks the current latency
@@ -159,7 +161,14 @@ remote func return_latency(client_time):
 		# Update the latency we're using with the average latency
 		latency = total_latency / latency_array.size()
 		print("New Latency ", latency)
-		print("Delta Latency ", delta_latency)
 		# Start again
 		latency_array.clear()
 	
+func print_time(t):
+	t = str(t)
+	var a = []
+	for c in t:
+		a.append(c)
+	if a.size() < 4: return
+	var time_string = a[-4]+a[-3]+":"+a[-2]+a[-1]
+	return time_string
