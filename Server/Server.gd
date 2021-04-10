@@ -9,7 +9,6 @@ func _ready():
 	start_server()
 	
 func start_server():
-	# net.create_server(PORT, MAX_PLAYERS)
 	if PROD:
 		print("Using SSL")
 		server.private_key = load("res://HTTPSKeys/privkey.key")
@@ -78,10 +77,16 @@ remote func broadcast_attack(player_state):
 	player_state["ID"] = player_id
 	rpc_id(0, "receive_attack", player_state)
 
+# CLOCK SYNC
+remote func fetch_server_time(initial_client_request_time):
+	var player_id = get_tree().get_rpc_sender_id() 
+	# Return current server time, and client_time at the moment of the request
+	rpc_id(player_id, "return_server_time", OS.get_system_time_msecs(), initial_client_request_time)
 
-
-
-
+remote func determine_latency(client_time):
+	# Client runs it every 0.5 seconds to determine latency
+	var player_id = get_tree().get_rpc_sender_id()
+	rpc_id(player_id, "return_latency", client_time)
 
 
 

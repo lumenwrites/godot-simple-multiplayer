@@ -53,10 +53,10 @@ __meta__ = {
 [node name="SpawnPositions" type="Node2D" parent="."]
 
 [node name="SpawnPos1" type="Position2D" parent="SpawnPositions"]
-position = Vector2( 128, 128 )
+position = Vector2( 128, -64 )
 
 [node name="SpawnPos5" type="Position2D" parent="SpawnPositions"]
-position = Vector2( 128, 320 )
+position = Vector2( 128, 128 )
 
 [node name="SpawnPos2" type="Position2D" parent="SpawnPositions"]
 position = Vector2( 832, 128 )

@@ -27,7 +27,7 @@ func _physics_process(delta):
 		vel += dir*speed
 		vel *= friction
 		vel = move_and_slide(vel)
-		if global_position.x > 400:
+		if global_position.x > 350:
 			dir = Vector2.LEFT
 		if global_position.x < 0:
 			dir = Vector2.RIGHT
